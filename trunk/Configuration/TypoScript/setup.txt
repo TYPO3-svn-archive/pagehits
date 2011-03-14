@@ -1,0 +1,13 @@
+includeLibs.user_Pagehits = EXT:pagehits/Classes/class.userPagehits.php
+lib.pagehits = USER
+lib.pagehits {
+	userFunc = user_Pagehits->addHits
+	userFunc {
+		filterBySession = 1
+	}
+}
+
+lib.showPagehits = USER
+lib.showPagehits {
+	userFunc = user_Pagehits->showHits
+}
