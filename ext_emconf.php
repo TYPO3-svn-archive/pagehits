@@ -3,7 +3,7 @@
 ########################################################################
 # Extension Manager/Repository config file for ext "pagehits".
 #
-# Auto generated 27-02-2011 23:55
+# Auto generated 14-03-2011 22:54
 #
 # Manual updates:
 # Only the data in the array - everything else is removed by next
@@ -40,7 +40,7 @@ $EM_CONF[$_EXTKEY] = array(
 		'suggests' => array(
 		),
 	),
-	'_md5_values_when_last_written' => 'a:7:{s:12:"ext_icon.gif";s:4:"a65c";s:17:"ext_localconf.php";s:4:"f28e";s:14:"ext_tables.php";s:4:"f76c";s:38:"Configuration/TypoScript/constants.txt";s:4:"d41d";s:34:"Configuration/TypoScript/setup.txt";s:4:"824f";s:31:"Resources/Public/CSS/tabbar.css";s:4:"e710";s:29:"Resources/Public/JS/tabbar.js";s:4:"aa9c";}',
+	'_md5_values_when_last_written' => 'a:7:{s:12:"ext_icon.gif";s:4:"3f54";s:17:"ext_localconf.php";s:4:"2ec3";s:14:"ext_tables.php";s:4:"8ef2";s:14:"ext_tables.sql";s:4:"03e7";s:30:"Classes/class.userPagehits.php";s:4:"9f2b";s:34:"Configuration/TypoScript/setup.txt";s:4:"d554";s:14:"doc/manual.sxw";s:4:"00ae";}',
 	'suggests' => array(
 	),
 );
