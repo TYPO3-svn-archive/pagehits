@@ -1,5 +1,5 @@
 includeLibs.user_Pagehits = EXT:pagehits/Classes/class.userPagehits.php
-lib.pagehits = USER
+lib.pagehits = USER_INT
 lib.pagehits {
 	userFunc = user_Pagehits->addHits
 	userFunc {
@@ -7,7 +7,7 @@ lib.pagehits {
 	}
 }
 
-lib.showPagehits = USER
+lib.showPagehits = USER_INT
 lib.showPagehits {
 	userFunc = user_Pagehits->showHits
 }
