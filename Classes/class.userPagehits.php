@@ -47,6 +47,8 @@ class user_Pagehits {
 	 */
 	private $pageUid = 0;
 
+	protected $evaluateThisPagehit = TRUE;
+
 
 	/**
 	 * Initializes the userfunction
@@ -69,7 +71,6 @@ class user_Pagehits {
 	 */
 	public function addHits($content = '', $conf = array()) {
 		$this->initializeUserfunction($conf);
-		$evaluateThisPagehit = TRUE;
 
 		// Filter the increase of pagehits by session
 		if ($this->userFunc['filterBySession']) {
@@ -77,7 +78,7 @@ class user_Pagehits {
 			$ignoredUids = t3lib_div::trimExplode(',', $ignoredUids, TRUE);
 
 			if (in_array($this->pageUid, $ignoredUids)) {
-				$evaluateThisPagehit = FALSE;
+				$this->evaluateThisPagehit = FALSE;
 			} else {
 				$ignoredUids[] = $this->pageUid;
 				$ignoredUids = implode(',', $ignoredUids);
@@ -86,13 +87,24 @@ class user_Pagehits {
 		}
 
 		// Get current pagehits, increase them and store them back to pages table
-		if ($evaluateThisPagehit === TRUE) {
+		if ($this->evaluateThisPagehit === TRUE) {
 			$currentPageHits = $this->getPagehits($this->pageUid);
 			$GLOBALS['TYPO3_DB']->exec_UPDATEquery(
 				'pages',
 				'uid=' . $this->pageUid . $this->cObj->enableFields('pages'),
 				array('tx_pagehits_hits' => $currentPageHits + 1)
 			);
+		}
+
+		// Hook 'addHits'
+		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['pagehits']['addHits'])) {
+			/** @var $pagehitModel Tx_Pagehits_Model_Pagehits */
+			$pagehitModel = $this->generatePagehitModel();
+
+			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['pagehits']['addHits'] as $_classRef) {
+				$_procObj = &t3lib_div::getUserObj($_classRef);
+				$_procObj->main($this, $pagehitModel);
+			}
 		}
 
 		return;
@@ -126,6 +138,23 @@ class user_Pagehits {
 			'uid=' . intval($uid) . $this->cObj->enableFields('pages')
 		);
 		return intval($row['tx_pagehits_hits']);
+	}
+
+	/**
+	 * Creates and returns a pagehit model, which is used for hook interactions
+	 *
+	 * @return Tx_Pagehits_Model_Pagehits
+	 */
+	protected function generatePagehitModel() {
+		/** @var $pagehitModel Tx_Pagehits_Model_Pagehits */
+		$pagehitModel = t3lib_div::makeInstance('Tx_Pagehits_Model_Pagehits');
+
+		$pagehitModel->setPageUid($this->pageUid);
+		$pagehitModel->setFilterBySession($this->userFunc['filterBySession']);
+		$pagehitModel->setHasBeenUpdated($this->evaluateThisPagehit);
+		$pagehitModel->setPagehitCount($this->getPagehits($this->pageUid));
+
+		return $pagehitModel;
 	}
 
 }
